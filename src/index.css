@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: var(--text-color);
+  background-color: var(--background-color);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+/* @layer base {
+  :root {
+    --primary-color: 247 147 34;
+    --text-color: 33 33 33;
+    --success-color: 0 200 81;
+    --info-color: 51 181 229;
+    --warn-color: 255 187 51;
+    --error-color: 254 78 78;
+    --background-color: 219 219 219;
+  }
+
+  :root[class~="dark"] {
+    --primary-color: 34 147 247;
+    --text-color: 255 255 255;
+    --success-color: 255 0 0;
+    --info-color: 51 181 229;
+    --warn-color: 255 187 51;
+    --error-color: 254 78 78;
+    --background-color: 36 36 36;
+  }
+} */
+@layer base {
+  [data-theme="light"] {
+    --primary-color: 247 147 34;
+    --text-color: 33 33 33;
+    --success-color: 0 200 81;
+    --info-color: 51 181 229;
+    --warn-color: 255 187 51;
+    --error-color: 254 78 78;
+    --background-color: 219 219 219;
+  }
+
+  [data-theme="dark"] {
+    --primary-color: 34 147 247;
+    --text-color: 255 255 255;
+    --success-color: 255 0 0;
+    --info-color: 51 181 229;
+    --warn-color: 255 187 51;
+    --error-color: 254 78 78;
+    --background-color: 36 36 36;
+  }
+}
+
+@theme inline {
+  --color-primary: rgb(var(--primary-color));
+  --color-text: rgb(var(--text-color));
+  --color-success: rgb(var(--success-color));
+  --color-info: rgb(var(--info-color));
+  --color-warn: rgb(var(--warn-color));
+  --color-error: rgb(var(--error-color));
+  --color-background: rgb(var(--background-color));
+}
+
+/* 
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+*/
+/* body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+} */
+/*
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */
