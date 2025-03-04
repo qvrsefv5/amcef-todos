@@ -5,12 +5,14 @@ import moment from "moment";
 import { useParams } from "react-router";
 import "./App.css";
 import { useApi } from "./api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { queryClient } from "./main";
 
-type Inputs = {
+type Todo = {
   title: string;
   description: string;
   deadline: Date;
+  completed?: boolean;
 };
 
 const schema = z.object({
@@ -33,7 +35,7 @@ function Todos() {
     error,
     data: todos,
   } = useQuery({
-    queryKey: ["todos", Number(params)],
+    queryKey: ["todos", Number(params.id)],
     queryFn: async () => {
       try {
         const response = await api.getListTodos({
@@ -49,16 +51,40 @@ function Todos() {
     },
   });
 
+  const createTodo = useMutation({
+    mutationFn: async ({ id, data }: { id: number; data: Todo }) => {
+      const response = await api.createTodo({
+        urlParams: { id },
+        data: {
+          ...data,
+          deadline: new Date(data.deadline).getTime(),
+          completed: false,
+        },
+      });
+
+      if (response?.status !== 200) {
+        return {};
+      }
+
+      return response?.data;
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos", Number(params.id)] });
+    },
+  });
+
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Inputs>({
+  } = useForm<Todo>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data: z.infer<typeof schema>) => {
+  const onSubmit: SubmitHandler<Todo> = (data: z.infer<typeof schema>) => {
     console.log(data);
     console.log(data.deadline.getDate());
+    createTodo.mutate({ id: Number(params.id), data });
   };
 
   return (
@@ -123,7 +149,9 @@ function Todos() {
             )}
           </div>
 
-          <input type="submit" />
+          <button type="submit" disabled={createTodo.isPending}>
+            Submit
+          </button>
         </form>
       </div>
       <div className="flex items-center flex-col">
@@ -139,6 +167,9 @@ function Todos() {
                 completed
                 <input type="checkbox" checked={todo.completed} />
               </label>
+              <div>
+                <button>delete</button>
+              </div>
             </div>
           ))}
       </div>

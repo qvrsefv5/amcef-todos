@@ -11,7 +11,7 @@ const endpoints = {
     },
   },
   deleteTodoList: {
-    url: ({ id }: Record<string, unknown>) => `/todo-app/${id}`,
+    url: ({ id }: Record<string, unknown>) => `/${id}`,
     method: "DELETE",
   },
 
@@ -20,7 +20,7 @@ const endpoints = {
     method: "GET",
   },
   createTodo: {
-    url: ({ id }: Record<string, unknown>) => `/todo-app/${id}/todos`,
+    url: ({ id }: Record<string, unknown>) => `/${id}/todos`,
     method: "POST",
     data: {
       title: "",
@@ -30,16 +30,14 @@ const endpoints = {
     },
   },
   updateTodo: {
-    url: ({ id, todoId }: Record<string, unknown>) =>
-      `/todo-app/${id}/todos/${todoId}`,
+    url: ({ id, todoId }: Record<string, unknown>) => `/${id}/todos/${todoId}`,
     method: "PUT",
     data: {
       completed: false,
     },
   },
   deleteTodo: {
-    url: ({ id, todoId }: Record<string, unknown>) =>
-      `/todo-app/${id}/todos/${todoId}`,
+    url: ({ id, todoId }: Record<string, unknown>) => `/${id}/todos/${todoId}`,
     method: "DELETE",
   },
 };
