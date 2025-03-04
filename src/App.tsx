@@ -1,49 +1,24 @@
-import { useApi } from "@/api";
-import { useQuery } from "@tanstack/react-query";
-import { Link } from "react-router";
-
-type TodoList = {
-  id: number;
-  createdAt: number;
-  todoListName: string;
-};
+import { BrowserRouter, Route, Routes } from "react-router";
+import { Layout } from "./layout/Layout";
+import TodoList from "./pages/TodoList";
+import Todos from "./Todos";
+import Settings from "./pages/Settings";
+import { useThemeContext } from "./ThemeContext";
 
 function App() {
-  const api = useApi();
-  const {
-    isPending,
-    error,
-    data: todoLists,
-  } = useQuery({
-    queryKey: ["todolists"],
-    queryFn: async () => {
-      try {
-        const response = await api.getTodoLists();
-        return response.data;
-      } catch (error) {
-        console.error(error);
-      }
-      return null;
-    },
-  });
-
-  if (isPending) return <h1>Loading...</h1>;
-  if (error) return <h1>An error has occurred {error.message}</h1>;
+  const { theme } = useThemeContext();
   return (
-    <>
-      <h1>Todo lists</h1>
-      <div className="flex flex-wrap justify-center mt-10">
-        {(todoLists as TodoList[]).map((list: TodoList) => {
-          return (
-            <Link to={`/todos/${list.id}`} className="p-4 max-w-sm">
-              <div className="p-5 max-w-sm rounded overflow-hidden shadow-lg">
-                <h2>{list.todoListName}</h2>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-    </>
+    <div data-theme={theme} className="bg-background dark:bg-background">
+      <BrowserRouter>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<TodoList />} />
+            <Route path="todos/:id" element={<Todos />} />
+            <Route path="settings" element={<Settings />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

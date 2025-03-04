@@ -73,6 +73,49 @@ function Todos() {
       queryClient.invalidateQueries({ queryKey: ["todos", Number(params.id)] });
     },
   });
+  const deleteTodo = useMutation({
+    mutationFn: async ({ id, todoId }: { id: number; todoId: number }) => {
+      const response = await api.deleteTodo({
+        urlParams: { id, todoId },
+      });
+
+      if (response?.status !== 200) {
+        return {};
+      }
+
+      return response?.data;
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos", Number(params.id)] });
+    },
+  });
+  const updateTodo = useMutation({
+    mutationFn: async ({
+      id,
+      todoId,
+      data,
+    }: {
+      id: number;
+      todoId: number;
+      data: Partial<Todo>;
+    }) => {
+      const response = await api.updateTodo({
+        urlParams: { id, todoId },
+        data: { ...data },
+      });
+
+      if (response?.status !== 200) {
+        return {};
+      }
+
+      return response?.data;
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["todos", Number(params.id)] });
+    },
+  });
 
   const {
     register,
@@ -119,6 +162,7 @@ function Todos() {
               Description
             </label>
             <textarea
+              placeholder="description text"
               id="description"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               {...register("description", { required: true })}
@@ -139,7 +183,7 @@ function Todos() {
               type="datetime-local"
               placeholder="deadline"
               defaultValue={moment(new Date().toISOString()).format(
-                "YYYY-MM-DD[T]00:00:00"
+                "YYYY-MM-DD[T]00:00:01"
               )}
               step={1}
               {...register("deadline", { required: true })}
@@ -165,10 +209,29 @@ function Todos() {
               <p>{todo.deadline}</p>
               <label>
                 completed
-                <input type="checkbox" checked={todo.completed} />
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() =>
+                    updateTodo.mutate({
+                      id: Number(params.id),
+                      todoId: todo.id,
+                      data: { completed: !todo.completed },
+                    })
+                  }
+                />
               </label>
               <div>
-                <button>delete</button>
+                <button
+                  onClick={() =>
+                    deleteTodo.mutate({
+                      id: Number(params.id),
+                      todoId: todo.id,
+                    })
+                  }
+                >
+                  delete
+                </button>
               </div>
             </div>
           ))}
