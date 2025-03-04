@@ -1,6 +1,6 @@
 import React from "react";
 import { Select } from "@headlessui/react";
-import { useThemeContext } from "@/ThemeContext";
+import { useThemeContext } from "@/contexts/ThemeContext";
 
 function Settings() {
   const { setAppTheme } = useThemeContext();

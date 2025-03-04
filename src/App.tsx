@@ -3,7 +3,7 @@ import { Layout } from "./layout/Layout";
 import TodoList from "./pages/TodoList";
 import Todos from "./Todos";
 import Settings from "./pages/Settings";
-import { useThemeContext } from "./ThemeContext";
+import { useThemeContext } from "./contexts/ThemeContext";
 
 function App() {
   const { theme } = useThemeContext();
